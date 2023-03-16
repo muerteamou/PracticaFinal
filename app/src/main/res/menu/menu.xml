@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Lista de Productos" android:id="@+id/ListaProductos"/>
+    <item android:title="Añadir"
+        android:id="@+id/Anyadir"
+        />
+    <item android:title="Lista de la compra" android:id="@+id/ListaCompra"/>
+</menu>
