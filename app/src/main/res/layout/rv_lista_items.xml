@@ -9,15 +9,24 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:paddingTop="15dp"
         android:text=""
-        android:textSize="16sp" />
+        android:textAlignment="inherit"
+        android:textSize="18sp" />
 
-    <Button
+    <ImageButton
+        android:id="@+id/btnDel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_delete_forever_24"
+        android:contentDescription="Eliminar de la lista"
+        />
+    <ImageButton
+        android:src="@drawable/baseline_add_shopping_cart_24"
         android:id="@+id/btnAdd"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:text="+"
-        android:textSize="20sp"
+        android:contentDescription="Añadir a la cesta"
         android:layout_marginEnd="5dp"
         />
 

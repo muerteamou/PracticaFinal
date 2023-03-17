@@ -15,21 +15,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-/**
- * Esta clase es la pantalla principal de la aplicación, donde se muestran todos los músicos almacenados en la base de datos.
- * Contiene un menú en la parte superior derecha para acceder a las distintas pantallas de la aplicación.
- *
- * @author Alejandro Piñero Medinilla
- */
 
 public class MainActivity extends AppCompatActivity {
 
     public static SQLiteDatabase db;
     static Adaptador adaptador;
+
+    ImageButton btnMostrarLCompra;
 
     EditText etNombre;
 
@@ -62,6 +59,15 @@ public class MainActivity extends AppCompatActivity {
         if (listaProductos.isEmpty()) {
             mostrar();
         }
+
+        btnMostrarLCompra = findViewById(R.id.btnMostrarListaCompra);
+        btnMostrarLCompra.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent listaCompra = new Intent(MainActivity.this, ListaCompra.class);
+                startActivity(listaCompra);
+            }
+        });
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -77,12 +83,13 @@ public class MainActivity extends AppCompatActivity {
                 Intent i1 = new Intent(this, MainActivity.class);
                 startActivity(i1);
                 break;
-            case R.id.Anyadir:
-                Intent i2 = new Intent(this, Anyadir.class);
+
+            case R.id.ListaCompra:
+                Intent i2 = new Intent(this, ListaCompra.class);
                 startActivity(i2);
                 break;
-            case R.id.ListaCompra:
-                Intent i3 = new Intent(this, ListaCompra.class);
+            case R.id.FinalizarCompra:
+                Intent i3 = new Intent(this, Finalizar.class);
                 startActivity(i3);
                 break;
             default:
@@ -108,21 +115,24 @@ public class MainActivity extends AppCompatActivity {
         adaptador.notifyDataSetChanged();
     }
 
-    public void mostrarToast(String producto) {
-        Toast.makeText(getApplicationContext(), producto + " añadido con éxito", Toast.LENGTH_SHORT).show();
-    }
-
     public void anyadirListaProducto(View view) {
-        try {
-            db.execSQL("INSERT INTO listaproductos values ('" + etNombre.getText().toString() + "');");
+        String item = etNombre.getText().toString();
+        String mensaje = getResources().getString(R.string.error_campo_vacio);
+        if (item.isEmpty())
+            Toast.makeText(getApplicationContext(), mensaje, Toast.LENGTH_SHORT).show();
+        else {
+            try {
+                db.execSQL("INSERT INTO listaproductos values ('" + item + "');");
 
-            Toast.makeText(getApplicationContext(), etNombre.getText().toString() + " añadido con éxito", Toast.LENGTH_SHORT).show();
-            etNombre.setText("");
-            mostrar();
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Ya has añadido " + etNombre.getText().toString() + " a la lista de productos", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), item + " añadido con éxito", Toast.LENGTH_SHORT).show();
+                etNombre.setText("");
+                mostrar();
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), "Ya has añadido " + item + " a la lista de productos", Toast.LENGTH_SHORT).show();
+            }
         }
     }
+
 
 
 }

@@ -13,7 +13,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -26,9 +28,9 @@ public class ListaCompra extends AppCompatActivity {
     ArrayList<String> listaCompra = new ArrayList<>();
     ArrayList<Integer> cantidadProductos = new ArrayList<>();
 
-    private Button btnAptos;
-    private Button btnNoAptos;
-    private Button btnReset;
+    private ImageButton btnBack;
+    private ImageButton btnNext;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,25 @@ public class ListaCompra extends AppCompatActivity {
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         recyclerView.setAdapter(adaptador);
+
+
+        btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent listaProductos = new Intent(ListaCompra.this, MainActivity.class);
+                startActivity(listaProductos);
+            }
+        });
+
+        btnNext = findViewById(R.id.btnFinalizar);
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent listaCompra = new Intent(ListaCompra.this, Finalizar.class);
+                startActivity(listaCompra);
+            }
+        });
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -72,12 +93,13 @@ public class ListaCompra extends AppCompatActivity {
                 Intent i1 = new Intent(this, MainActivity.class);
                 startActivity(i1);
                 break;
-            case R.id.Anyadir:
-                Intent i2 = new Intent(this, Anyadir.class);
+
+            case R.id.ListaCompra:
+                Intent i2 = new Intent(this, ListaCompra.class);
                 startActivity(i2);
                 break;
-            case R.id.ListaCompra:
-                Intent i3 = new Intent(this, ListaCompra.class);
+            case R.id.FinalizarCompra:
+                Intent i3 = new Intent(this, Finalizar.class);
                 startActivity(i3);
                 break;
             default:

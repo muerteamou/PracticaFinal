@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,8 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
-
-import com.example.practicafinal.MainActivity;
 
 
 public class Adaptador extends RecyclerView.Adapter<Adaptador.ViewHolder> {
@@ -57,12 +56,21 @@ public class Adaptador extends RecyclerView.Adapter<Adaptador.ViewHolder> {
 
         try {
             db.execSQL("INSERT INTO listacompra values ('" + producto + "', '" + "1" + "' );");
-            Toast.makeText(context, producto + " añadido con éxito", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, producto + " añadido a la lista de la compra.", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             Toast.makeText(context, "Ya has añadido " + producto + " a la lista de productos", Toast.LENGTH_SHORT).show();
         }
         try {
             db.execSQL("DELETE FROM listaproductos WHERE producto LIKE " + "'" + producto + "'");
+            mostrar();
+        } catch (Exception e) {
+        }
+    }
+
+    public void eliminarProductoLista(String producto) {
+        try {
+            db.execSQL("DELETE FROM listaproductos WHERE producto LIKE " + "'" + producto + "'");
+            Toast.makeText(context, producto + " eliminado", Toast.LENGTH_SHORT).show();
             mostrar();
         } catch (Exception e) {
         }
@@ -82,6 +90,16 @@ public class Adaptador extends RecyclerView.Adapter<Adaptador.ViewHolder> {
                 notifyItemRemoved(holder.getAdapterPosition());
             }
         });
+        holder.btnDel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String nombreProducto = aListaProductos.get(holder.getAdapterPosition());
+                aListaProductos.remove(holder.getAdapterPosition());
+                MainActivity main = new MainActivity();
+                eliminarProductoLista(nombreProducto);
+                notifyItemRemoved(holder.getAdapterPosition());
+            }
+        });
     }
 
     @Override
@@ -92,13 +110,15 @@ public class Adaptador extends RecyclerView.Adapter<Adaptador.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView nombreItem;
 
-        private Button btnAdd;
+        private ImageButton btnAdd;
+        private ImageButton btnDel;
 
 
         public ViewHolder(View itemView) {
             super(itemView);
             nombreItem = itemView.findViewById(R.id.tvNombreProducto);
             btnAdd = itemView.findViewById(R.id.btnAdd);
+            btnDel = itemView.findViewById(R.id.btnDel);
         }
 
 
