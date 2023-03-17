@@ -46,6 +46,10 @@ public class Anyadir extends AppCompatActivity {
                 Intent i2 = new Intent(this, Anyadir.class);
                 startActivity(i2);
                 break;
+            case R.id.ListaCompra:
+                Intent i3 = new Intent(this, ListaCompra.class);
+                startActivity(i3);
+                break;
             default:
                 break;
         }
@@ -60,21 +64,11 @@ public class Anyadir extends AppCompatActivity {
             etNombre.setText("");
             mostrar();
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Ya has añadido " + etNombre.getText().toString() + " a la lista de productos", Toast.LENGTH_SHORT).show();
         }
 
     }
 
-    public static void anyadirListaCompra(String producto) {
-        try {
-            db.execSQL("INSERT INTO listacompra values ('" + producto + "', '" + "1" + "' );");
-            db.execSQL("DELETE FROM listaproductos WHERE producto LIKE " + "'" + producto + "'");
-            mostrar();
-        } catch (Exception e) {
-
-        }
-
-    }
 
 }
 

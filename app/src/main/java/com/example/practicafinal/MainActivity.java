@@ -13,6 +13,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     public static SQLiteDatabase db;
     Adaptador adaptador;
 
+
     public static ArrayList<String> listaProductos = new ArrayList<>();
     public static ArrayList<String> listaCompra = new ArrayList<>();
     public static ArrayList<Integer> cantidadProductos = new ArrayList<>();
@@ -38,17 +40,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        //deleteDatabase("practicafinal");
         db = openOrCreateDatabase("practicafinal", Context.MODE_PRIVATE, null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS listaproductos(producto VARCHAR)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS listacompra(producto VARCHAR, cantidad int)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS listaproductos(producto VARCHAR UNIQUE)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS listacompra(producto VARCHAR UNIQUE, cantidad int)");
 
         if (listaProductos.isEmpty()) {
             mostrar();
         }
         RecyclerView recyclerView = findViewById(R.id.recycleView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adaptador = new Adaptador(this, listaProductos, listaCompra, cantidadProductos);
+        adaptador = new Adaptador(this, listaProductos, listaCompra, cantidadProductos, db);
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), 1);
         recyclerView.addItemDecoration(dividerItemDecoration);
@@ -82,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+
+
     public static void mostrar() {
         listaProductos.clear();
 
@@ -98,6 +102,9 @@ public class MainActivity extends AppCompatActivity {
         c.close();
     }
 
+    public void mostrarToast(String producto){
+        Toast.makeText(getApplicationContext(), producto + " añadido con éxito", Toast.LENGTH_SHORT).show();
+    }
 
 
 
