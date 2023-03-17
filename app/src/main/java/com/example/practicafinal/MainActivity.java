@@ -13,6 +13,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -27,8 +29,9 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     public static SQLiteDatabase db;
-    Adaptador adaptador;
+    static Adaptador adaptador;
 
+    EditText etNombre;
 
     public static ArrayList<String> listaProductos = new ArrayList<>();
     public static ArrayList<String> listaCompra = new ArrayList<>();
@@ -40,14 +43,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        etNombre = findViewById(R.id.etNombre);
+
         //deleteDatabase("practicafinal");
         db = openOrCreateDatabase("practicafinal", Context.MODE_PRIVATE, null);
         db.execSQL("CREATE TABLE IF NOT EXISTS listaproductos(producto VARCHAR UNIQUE)");
         db.execSQL("CREATE TABLE IF NOT EXISTS listacompra(producto VARCHAR UNIQUE, cantidad int)");
 
-        if (listaProductos.isEmpty()) {
-            mostrar();
-        }
+
         RecyclerView recyclerView = findViewById(R.id.recycleView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adaptador = new Adaptador(this, listaProductos, listaCompra, cantidadProductos, db);
@@ -56,12 +59,16 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         recyclerView.setAdapter(adaptador);
+        if (listaProductos.isEmpty()) {
+            mostrar();
+        }
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
+
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()) {
@@ -85,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     public static void mostrar() {
         listaProductos.clear();
 
@@ -93,19 +99,30 @@ public class MainActivity extends AppCompatActivity {
         Cursor c = db.rawQuery("SELECT * FROM listaproductos", null);
         if (c.getCount() == 0) {
             result = "No hay datos en la bd";
-
         } else {
             while (c.moveToNext()) {
                 listaProductos.add(c.getString(0));
             }
         }
         c.close();
+        adaptador.notifyDataSetChanged();
     }
 
-    public void mostrarToast(String producto){
+    public void mostrarToast(String producto) {
         Toast.makeText(getApplicationContext(), producto + " añadido con éxito", Toast.LENGTH_SHORT).show();
     }
 
+    public void anyadirListaProducto(View view) {
+        try {
+            db.execSQL("INSERT INTO listaproductos values ('" + etNombre.getText().toString() + "');");
+
+            Toast.makeText(getApplicationContext(), etNombre.getText().toString() + " añadido con éxito", Toast.LENGTH_SHORT).show();
+            etNombre.setText("");
+            mostrar();
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "Ya has añadido " + etNombre.getText().toString() + " a la lista de productos", Toast.LENGTH_SHORT).show();
+        }
+    }
 
 
 }

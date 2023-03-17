@@ -56,18 +56,7 @@ public class Anyadir extends AppCompatActivity {
         return true;
     }
 
-    public void anyadirListaProducto(View view) {
-        try {
-            db.execSQL("INSERT INTO listaproductos values ('" + etNombre.getText().toString() + "');");
 
-            Toast.makeText(getApplicationContext(), etNombre.getText().toString() + " añadido con éxito", Toast.LENGTH_SHORT).show();
-            etNombre.setText("");
-            mostrar();
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Ya has añadido " + etNombre.getText().toString() + " a la lista de productos", Toast.LENGTH_SHORT).show();
-        }
-
-    }
 
 
 }
